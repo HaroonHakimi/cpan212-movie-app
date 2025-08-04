@@ -39,17 +39,29 @@ app.use('/movies', movieRoutes);
 // Home page
 const Movie = require('./models/Movie');
 app.get('/', async (req, res) => {
-  const movies = await Movie.find().populate('user', 'username').sort({ createdAt: -1 });
-  res.render('index', { user: req.session.user, movies });
+  try {
+    const movies = await Movie.find().populate('user', 'username').sort({ createdAt: -1 });
+    res.render('index', { user: req.session.user, movies });
+  } catch (error) {
+    console.error('Error fetching movies:', error);
+    res.render('index', { user: req.session.user, movies: [], error: 'Failed to load movies' });
+  }
 });
 
 // Error handler
 app.use((err, req, res, next) => {
+  console.error('Error:', err);
   res.status(err.status || 500);
-  res.render('error', { message: err.message, error: err });
+  res.render('error', { message: err.message, error: process.env.NODE_ENV === 'production' ? {} : err });
 });
 
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-}); 
+// Export the Express app for Vercel
+module.exports = app;
+
+// For local development
+if (require.main === module) {
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+  });
+}
