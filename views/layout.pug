@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    title Movie App
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(rel='stylesheet', href='/css/style.css')
+    script(src='/js/main.js')
+  body
+    nav
+      ul
+        li: a(href='/') Home
+        if !user
+          li: a(href='/login') Login
+          li: a(href='/register') Register
+        else
+          li: a(href='/movies/add') Add Movie
+          li
+            form(action='/logout', method='POST')
+              button(type='submit') Logout
+    main
+      block content

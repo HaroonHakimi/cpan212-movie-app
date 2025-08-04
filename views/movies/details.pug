@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  .content
+    .movie-details
+      h1= movie.name
+      .movie-info
+        p
+          strong Description: 
+          span #{movie.description}
+        p
+          strong Year: 
+          span #{movie.year}
+        p
+          strong Genres: 
+          span #{movie.genres.join(', ')}
+        p
+          strong Rating: 
+          span #{movie.rating}/10
+        p
+          strong Posted by: 
+          span #{movie.user.username}
+      
+      if user && user._id == movie.user._id
+        .actions
+          a(href=`/movies/${movie._id}/edit`) Edit Movie
+          form(action=`/movies/${movie._id}/delete`, method='POST', id='deleteForm', style='display: inline;')
+            button(type='submit') Delete Movie
+        
+        script.
+          document.getElementById('deleteForm').addEventListener('submit', function(e) {
+            if (!confirm('Are you sure you want to delete this movie?')) {
+              e.preventDefault();
+            }
+          });

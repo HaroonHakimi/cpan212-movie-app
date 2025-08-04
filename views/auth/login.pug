@@ -1,0 +1,24 @@
+extends ../layout
+
+block content
+  .content
+    h1 Register
+    if errors && errors.length > 0
+      .errors
+        ul
+          each error in errors
+            li.error= error.msg
+    form.auth-form(action='/register', method='POST')
+      .form-group
+        label(for='username') Username:
+        input(type='text', id='username', name='username', value=user && user.username || '', required)
+      
+      .form-group
+        label(for='password') Password:
+        input(type='password', id='password', name='password', required)
+      
+      button(type='submit') Register
+    
+    .auth-links
+      p Already have an account? 
+        a(href='/login') Login here

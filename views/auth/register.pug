@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+  h1 Register
+  if errors
+    ul
+      each error in errors
+        li= error.msg
+  form(action='/register', method='POST')
+    label(for='username') Username:
+    input(type='text', name='username', value=user.username || '')
+    br
+    label(for='password') Password:
+    input(type='password', name='password')
+    br
+    button(type='submit') Register 
